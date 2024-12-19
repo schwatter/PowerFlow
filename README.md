@@ -13,7 +13,7 @@ Vielleicht, wahrscheinlich gibt es einen eleganteren Weg.
 Mit dem Baukasten können noch nicht alle, aber doch schon viele Situationen abgebildet
 werden. Bzw. bis jetzt ist es mehr auf meine Bedürfnisse angepasst.
 
-Anwendung
+**Anwendung**
 - Echte und fiktive Werte werden im powerGrid dummyNew gesetzt.
 - Die animierten Linien folgen der Regel größer oder kleiner als 0.
 - Der Batteriering ist die Ausnahme mit stop,gridLoad,gridUnload,solarLoad und houseUnload.
