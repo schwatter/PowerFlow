@@ -24,7 +24,7 @@ werden. Bzw. bis jetzt ist es mehr auf meine Bedürfnisse angepasst.
 
 Um das SVG an euren Geschmack anzupassen, empfehle ich diesen SVG-Editor --> https://www.svgviewer.dev/
 
-1. 98_dummyNew.pm Danke @Wzut, für den Hinweis, das nur eine 1 zu einer 0 geändert werden muss.
+**1. 98_dummyNew.pm** Danke @Wzut, für den Hinweis, das nur eine 1 zu einer 0 geändert werden muss.
 Als erstes wird ein neuer Dummy erstellt. Dazu von 98_dummy.pm den Code in 98_dummyNew.pm packen. Dann muss alles
 im dummy auf dummyNew geändert.
 
@@ -39,11 +39,11 @@ readingsSingleUpdate($hash, $v, join(" ",@a), 0);
 Dadurch kann jetzt das Aktualisieren des STATE unterdrückt werden.
 Bedeutet, damit ist alles in einem dummy. Zum Abschluss den neuen dummy in das Verzeichnis zurück kopieren und Rechte nicht vergessen.
 
-2. Das Javasript -> svg_update.js[Das liest die Werte aus powerGrid und setzt die Werte im SVG]
+**2. Das Javasript -> svg_update.js[Das liest die Werte aus powerGrid und setzt die Werte im SVG]**
 Das Javascript ist unten im Anhang. Es muss nach /opt/fhem/www/codemirror kopiert werden.
 Rechte/Eigentümer : fhem/Gruppe:dialout
 
-3. FHEMWEB (Javascript zuweisen + verbose 1)
+**3. FHEMWEB (Javascript zuweisen + verbose 1)**
 Bei jedem FHEMWEB-Device muss der Pfad zum Javascript angegeben werden. Verbose auf 1. Bei 4 wird der Log vollgemüllt.
 ```
 attr WEB JavaScripts codemirror/svg_update.js
@@ -52,7 +52,7 @@ attr WEB verbose 1
 Damit das Script und der neue dummyNew korrekt eingebunden werden, müsst ihr Fhem mit "shutdown restart" neu starten.
 Ist alles eingebunden und ändert ihr im Javascript etwas, müsst ihr nur euren Browsercache mit STRG + F5 leeren.
 
-4. dummyNew[Hauptdevice zum anzeigen der Werte und Animationen]
+**4. dummyNew[Hauptdevice zum anzeigen der Werte und Animationen]**
 ```
 defmod powerGrid dummyNew
 attr powerGrid readingList airdryer_v battery_v battery_p batteryState_v dishwasher_v dryer_v fridge_v grid_v grid_in_v grid_out_v house_v lowcarbon_v solar_v solarToBattery_v washer_v
@@ -498,7 +498,7 @@ svg {\
 </html>\
 ```
 
-5. Mein DOIF
+**5. Mein DOIF**
 ```
 defmod Powergrid_DOIF DOIF ## Grid + House\
 ([MQTT2_Smartmeter_2E1F50:"APOX_Power"])\
@@ -549,7 +549,7 @@ setstate Powergrid_DOIF 2024-11-10 14:16:03 mode enabled
 setstate Powergrid_DOIF 2024-11-10 15:26:09 state cmd_6
 ```
 
-6. Electricmap - Erzeugt das Reading für FossilFree
+**6. Electricmap - Erzeugt das Reading für FossilFree**
 Laut Webseite wird ein Apikey benötigt. Es funktioniert aber auch ohne.
 ```
 defmod electricitymap HTTPMOD none 60
