@@ -1,4 +1,4 @@
 ## PowerFlow für Fhem
-SVG welches mit JS befeuert wird.
+[animiertes SVG, modifizierter dummy, javascript]
 
 ![](images/powerflow.jpg)
