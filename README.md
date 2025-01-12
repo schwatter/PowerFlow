@@ -1,7 +1,7 @@
 ## PowerFlow für Fhem
 [animiertes SVG, modifizierter dummy, javascript]
 
-![](images/powerflow.jpg)
+![](images/animation.gif)
 
 Optisch liebäugelt er mit der Powerflow Card Plus von HA.
 Zusammengesetzt ist er aus einem modifizierten dummy. Dieser beherbergt die SVG-Grafik im stateFormat sowie alle Werte.
