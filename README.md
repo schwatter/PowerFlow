@@ -60,442 +60,526 @@ attr powerGrid room Energy
 attr powerGrid setList airdryer_v:textField battery_v:textField battery_p:textField batteryState_v:select,stop,gridLoad,gridUnload,solarLoad,houseUnload dishwasher_v:textField dryer_v:textField fridge_v:textField grid_v:textField grid_in_v:textField grid_out_v:textField house_v:textField lowcarbon_v:textField solar_v:textField washer_v:textField
 attr powerGrid stateFormat <!DOCTYPE html>\
 <html>\
+\
 <head>\
-<title>powerGrid</title>\
-<style>\
-#wrapper {\
-    background: black;;\
-}\
-svg {\
-    width: 100%;;\
-    height: auto;;\
-}\
-</style>\
+    <title>powerGrid</title>\
+    <style>\
+        /* Container für das SVG */\
+        #wrapper {\
+            background: black;;\
+            display: flex;;\
+            justify-content: center;;\
+        }\
+        \
+        /* SVG-Stile überschreiben */\
+        #powerGrid svg {\
+            background-color: black;;\
+            width: 90% !important;;\
+            height: auto;;\
+        }\
+        \
+        /* Mobile Ansicht */\
+        @media (max-width: 1200px) {\
+            #powerGrid svg {\
+                width: 850px !important;;\
+                height: auto;;\
+            }\
+        \
+            /* Verstecke alle Ringe */\
+            .ring {\
+                display: none !important;;\
+            }\
+        \
+            /* Verstecke animierte Punkte */\
+            .animated-point {\
+                animation: none !important;;\
+                visibility: hidden !important;;\
+            }\
+        }\
+    </style>\
 </head>\
+\
 <body>\
 \
-<div id="wrapper">\
-<svg viewBox="0 0 650 500" xmlns="http://www.w3.org/2000/svg" style="background-color: black;; width: 90%;; height: auto;;">\
- \
- <!-- Titel -->\
-  <text x="20" y="30" font-family="Arial" font-size="24" fill="white">Power Flow</text>\
+    <div id="wrapper">\
+        <svg  xmlns="http://www.w3.org/2000/svg">\
 \
-  <!-- Kohlenstoffarm -->\
-  <circle id="lowCarbonCircle" cx="100" cy="100" r="45" fill="none" stroke="#0ACC0A" stroke-width="10" opacity="0.4"/>\
-  <circle cx="100" cy="100" r="40" fill="none" stroke="#0ACC0A" stroke-width="5"/>\
-  <text x="100" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">FossilFree</text>\
-  <text id="lowCarbonPower" x="100" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">0 %</text>\
+            <!-- Titel -->\
+            <text x="20" y="30" font-family="Arial" font-size="24" fill="white">Power Flow</text>\
 \
-  <!-- Solar -->\
-  <circle id="solarCircle" cx="250" cy="100" r="45" fill="none" stroke="#FFE74B" stroke-width="10" opacity="0.4"/>\
-  <circle cx="250" cy="100" r="40" fill="none" stroke="#FFE74B" stroke-width="5"/>\
-  <text x="250" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Solar</text>\
-  <text id="solarPower" x="250" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Kohlenstoffarm -->\
+            <circle id="lowCarbonCircle" cx="100" cy="100" r="45" fill="none" stroke="#0ACC0A" stroke-width="10" opacity="0.4" />\
+            <circle cx="100" cy="100" r="40" fill="none" stroke="#0ACC0A" stroke-width="5" />\
+            <text x="100" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">FossilFree</text>\
+            <text id="lowCarbonPower" x="100" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">0 %</text>\
 \
-  <!-- Netz -->\
-  <rect x="55" y="205" rx="25" ry="25" width="90" height="90" fill="none" opacity="0.3" stroke="#006EFE" stroke-width="10"/>\
-  <rect x="60" y="210" rx="20" ry="20" width="80" height="80" fill="none" stroke="#006EFE" stroke-width="5" />  \
-  <text x="100" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Grid</text>\
-  <text id="gridPowerOut" x="100" y="235" font-family="Arial" font-size="12" fill="#FFE74B" text-anchor="middle" alignment-baseline="middle"></text>\
-  <text id="gridPowerIn" x="100" y="265" font-family="Arial" font-size="12" fill="#006EFE" text-anchor="middle" alignment-baseline="middle"></text>\
-  <text id="gridPower" x="100" y="280" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Solar -->\
+            <circle id="solarCircle" cx="250" cy="100" r="45" fill="none" stroke="#FFE74B" stroke-width="10" opacity="0.4" />\
+            <circle cx="250" cy="100" r="40" fill="none" stroke="#FFE74B" stroke-width="5" />\
+            <text x="250" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Solar</text>\
+            <text id="solarPower" x="250" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Batterie Label -->\
-  <text x="250" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Battery</text>\
-  <text id="batteryPower" x="250" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
-  <text id="batteryPercent" x="250" y="385" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Netz -->\
+            <rect x="55" y="205" rx="25" ry="25" width="90" height="90" fill="none" opacity="0.3" stroke="#006EFE" stroke-width="10" />\
+            <rect x="60" y="210" rx="20" ry="20" width="80" height="80" fill="none" stroke="#006EFE" stroke-width="5" />\
+            <text x="100" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Grid</text>\
+            <text id="gridPowerOut" x="100" y="235" font-family="Arial" font-size="12" fill="#FFE74B" text-anchor="middle" alignment-baseline="middle"></text>\
+            <text id="gridPowerIn" x="100" y="265" font-family="Arial" font-size="12" fill="#006EFE" text-anchor="middle" alignment-baseline="middle"></text>\
+            <text id="gridPower" x="100" y="280" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Batterie stop -->\
-  <circle id="batteryCircle" cx="250" cy="400" r="45" fill="none" stroke="#01F2D2" stroke-width="10" opacity="0.4"/>\
-  <circle id="batteryStatic" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5"/>\
+            <!-- Batterie Label -->\
+            <text x="250" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Battery</text>\
+            <text id="batteryPower" x="250" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <text id="batteryPercent" x="250" y="385" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Batterie dreht rechts -->\
-  <circle id="batteryClockwiseGridLoad" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
-    <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
-  </circle>\
+            <!-- Batterie stop -->\
+            <circle id="batteryCircle" cx="250" cy="400" r="45" fill="none" stroke="#01F2D2" stroke-width="10" opacity="0.4" />\
+            <circle id="batteryStatic" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" />\
 \
-  <!-- Batterie dreht rechts -->\
-  <circle id="batteryClockwiseHouseUnload" cx="250" cy="400" r="40" fill="none" stroke="purple" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
-    <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
-  </circle>\
+            <!-- Batterie dreht rechts -->\
+            <circle id="batteryClockwiseGridLoad" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
+                <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
+            </circle>\
 \
-  <!-- Batterie dreht rechts -->\
-  <circle id="batteryClockwiseSolarLoad" cx="250" cy="400" r="40" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
-    <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
-  </circle>\
+            <!-- Batterie dreht rechts -->\
+            <circle id="batteryClockwiseHouseUnload" cx="250" cy="400" r="40" fill="none" stroke="#F200FF" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
+                <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
+            </circle>\
 \
-  <!-- Batteriering dreht links -->\
-  <circle id="batteryCounterclockwiseGridUnload" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
-    <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="-360 250 400" dur="5s" repeatCount="indefinite" />\
-  </circle>\
+            <!-- Batterie dreht rechts -->\
+            <circle id="batteryClockwiseSolarLoad" cx="250" cy="400" r="40" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
+                <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
+            </circle>\
 \
-  <!-- Haus + Ringsegmente -->\
-  <circle id="houseCircle" cx="400" cy="250" r="45" fill="none" stroke="purple" stroke-width="10" opacity="0.4"/>\
-  <circle id="solarSegment" cx="400" cy="250" r="40" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="0 100" />\
-  <circle id="gridSegment" cx="400" cy="250" r="40" fill="none" stroke="blue" stroke-width="5" stroke-dasharray="0 100" />\
-  <circle id="batterySegment" cx="400" cy="250" r="40" fill="none" stroke="purple" stroke-width="5" stroke-dasharray="0 100" />\
-  <text x="400" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">House</text>\
-  <text id="housePower" x="400" y="265" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Batteriering dreht links -->\
+            <circle id="batteryCounterclockwiseGridUnload" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
+                <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="-360 250 400" dur="5s" repeatCount="indefinite" />\
+            </circle>\
 \
-  <!-- Lufttrockner -->\
-  <circle id="airDryerCircle" cx="400" cy="100" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4"/>\
-  <circle cx="400" cy="100" r="40" fill="none" stroke="#32AFFF" stroke-width="5"/>\
-  <text x="400" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Airdryer</text>\
-  <text id="airdryerPower" x="400" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Haus + Ringsegmente -->\
+            <circle id="houseCircle" cx="400" cy="250" r="45" fill="none" stroke="#F200FF" stroke-width="10" opacity="0.4" />\
+            <circle id="solarSegment" cx="400" cy="250" r="40" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="0 100" />\
+            <circle id="gridSegment" cx="400" cy="250" r="40" fill="none" stroke="blue" stroke-width="5" stroke-dasharray="0 100" />\
+            <circle id="batterySegment" cx="400" cy="250" r="40" fill="none" stroke="#F200FF" stroke-width="5" stroke-dasharray="0 100" />\
+            <text x="400" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">House</text>\
+            <text id="housePower" x="400" y="265" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Kühlschrank -->\\
-  <circle id="fridgeCircle" cx="400" cy="400" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4"/>\
-  <circle cx="400" cy="400" r="40" fill="none" stroke="#32AFFF" stroke-width="5"/>\
-  <text x="400" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Fridge</text>\
-  <text id="fridgePower" x="400" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Lufttrockner -->\
+            <circle id="airDryerCircle" class="ring" cx="400" cy="100" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="400" cy="100" r="40" fill="none" stroke="#32AFFF" stroke-width="5" />\
+            <text class="ring" x="400" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Airdryer</text>\
+            <text id="airdryerPower" class="ring" x="400" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Waschmaschine -->\
-  <circle id="washerCircle" cx="550" cy="100" r="45" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4"/>\
-  <circle cx="550" cy="100" r="40" fill="none" stroke="#2AB5C7" stroke-width="5"/>\
-  <text x="550" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Washer</text>\
-  <text id="washerPower" x="550" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Kühlschrank -->\\
+            <circle id="fridgeCircle" class="ring" cx="400" cy="400" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="400" cy="400" r="40" fill="none" stroke="#32AFFF" stroke-width="5" />\
+            <text class="ring" x="400" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Fridge</text>\
+            <text id="fridgePower" class="ring" x="400" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Trockner -->\
-  <circle id="dryerCircle" cx="550" cy="250" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4"/>\
-  <circle cx="550" cy="250" r="40" fill="none" stroke="#32AFFF" stroke-width="5"/>\
-  <text x="550" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Dryer</text>\
-  <text id="dryerPower" x="550" y="265" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Waschmaschine -->\
+            <circle id="washerCircle" class="ring" cx="550" cy="100" r="45" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="550" cy="100" r="40" fill="none" stroke="#2AB5C7" stroke-width="5" />\
+            <text class="ring" x="550" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Washer</text>\
+            <text id="washerPower" class="ring" x="550" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Geschirrspüler -->\
-  <circle id="dishwasherCircle" cx="550" cy="400" r="45" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4"/>\
-  <circle cx="550" cy="400" r="40" fill="none" stroke="#2AB5C7" stroke-width="5"/>\
-  <text x="550" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Dishwasher</text>\
-  <text id="dishwasherPower" x="550" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Trockner -->\
+            <circle id="dryerCircle" class="ring" cx="550" cy="250" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="550" cy="250" r="40" fill="none" stroke="#32AFFF" stroke-width="5" />\
+            <text class="ring" x="550" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Dryer</text>\
+            <text id="dryerPower" class="ring" x="550" y="265" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Verbindungslinien -->\
+            <!-- Geschirrspüler -->\
+            <circle id="dishwasherCircle" class="ring" cx="550" cy="400" r="45" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="550" cy="400" r="40" fill="none" stroke="#2AB5C7" stroke-width="5" />\
+            <text class="ring" x="550" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Dishwasher</text>\
+            <text id="dishwasherPower" class="ring" x="550" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Verbindungslinie von Netz zu Haus und Solar zu Batterie -->\
-  <path id="solarToBatteryPath" d="M 250 145 A 0 100 0 0 1 250 354" stroke="#FFE74B" stroke-width="2" fill="transparent"/>\
-  <path id="gridToHousePath" d="M 146 250 H 357" stroke="blue" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="blue">\
-    <animateMotion id="gridToHouse" dur="3s" repeatCount="indefinite">\
-      <mpath href="#gridToHousePath"/>\
-    </animateMotion>\
-  </circle>\
-  <circle r="5" fill="#FFE74B">\
-    <animateMotion id="solarToBattery" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#solarToBatteryPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinien -->\
 \
-  <!-- Verbindungslinie von Batterie zu Haus --> \
-  <path id="batteryToHousePath" d="M 260 354 A 110 100 0 0 1 357 260" stroke="purple" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="purple">\
-    <animateMotion id="batteryToHouse" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#batteryToHousePath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Netz zu Haus und Solar zu Batterie -->\
+            <path id="solarToBatteryPath" d="M 250 145 A 0 100 0 0 1 250 354" stroke="#FFE74B" stroke-width="2" fill="transparent" />\
+            <path id="gridToHousePath" d="M 146 250 H 357" stroke="blue" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="blue">\
+                <animateMotion id="gridToHouse" dur="3s" repeatCount="indefinite">\
+                    <mpath href="#gridToHousePath" />\
+                </animateMotion>\
+            </circle>\
+            <circle r="5" fill="#FFE74B">\
+                <animateMotion id="solarToBattery" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#solarToBatteryPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Solar zu Haus -->\
-  <path id="solarToHousePath" d="M 260 145 A 110 100 0 0 0 357 240" stroke="#FFE74B" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#FFE74B">\
-    <animateMotion id="solarToHouse" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#solarToHousePath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Batterie zu Haus -->\
+            <path id="batteryToHousePath" d="M 260 354 A 110 100 0 0 1 357 260" stroke="#F200FF" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#F200FF">\
+                <animateMotion id="batteryToHouse" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#batteryToHousePath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Haus zu Lufttrockner -->\
-  <path id="houseToAirdryerPath" d="M 400 203 A 0 67 0 0 1 400 145" stroke="#32AFFF" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#32AFFF">\
-    <animateMotion id="houseToAirdryer" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#houseToAirdryerPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Solar zu Haus -->\
+            <path id="solarToHousePath" d="M 260 145 A 110 100 0 0 0 357 240" stroke="#FFE74B" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#FFE74B">\
+                <animateMotion id="solarToHouse" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#solarToHousePath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Haus zu Kühlschrank -->\
-  <path id="houseToFridgePath" d="M 400 298 A 0 67 0 0 1 400 354" stroke="#32AFFF" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#32AFFF">\
-    <animateMotion id="houseToFridge" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#houseToFridgePath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Lufttrockner -->\
+            <path id="houseToAirdryerPath" class="ring" d="M 400 203 A 0 67 0 0 1 400 145" stroke="#32AFFF" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#32AFFF" class="animated-point">\
+                <animateMotion id="houseToAirdryer" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#houseToAirdryerPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Netz zu Kohlenstoffarm -->\
-  <path id="gridToLowCarbonPath" d="M 100 145 A 0 68 0 0 1 100 208" stroke="#30FF24" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#30FF24">\
-    <animateMotion id="gridToLowCarbon" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#gridToLowCarbonPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Kühlschrank -->\
+            <path id="houseToFridgePath" class="ring" d="M 400 298 A 0 67 0 0 1 400 354" stroke="#32AFFF" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#32AFFF" class="animated-point">\
+                <animateMotion id="houseToFridge" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#houseToFridgePath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Haus zu Trockner -->\
-  <path id="houseToDryerPath" d="M 446 250 A 0 0 0 0 1 505 250" stroke="#32AFFF" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#32AFFF">\
-    <animateMotion id="houseToDryer" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#houseToDryerPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Netz zu Kohlenstoffarm -->\
+            <path id="gridToLowCarbonPath" d="M 100 145 A 0 68 0 0 1 100 208" stroke="#30FF24" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#30FF24">\
+                <animateMotion id="gridToLowCarbon" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#gridToLowCarbonPath" />\
+                </animateMotion>\
+            </circle>\
 \
-    <!-- Verbindungslinie von Haus zu Waschmaschine -->\
-  <path id="houseToWasherPath" d="M 446 240 A 110 110 0 0 0 550 145" stroke="#2AB5C7" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#2AB5C7">\
-    <animateMotion id="houseToWasher" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#houseToWasherPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Trockner -->\
+            <path id="houseToDryerPath" class="ring" d="M 446 250 A 0 0 0 0 1 505 250" stroke="#32AFFF" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#32AFFF" class="animated-point">\
+                <animateMotion id="houseToDryer" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#houseToDryerPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Haus zu Geschirrspüler -->\
-  <path id="houseToDishwasherPath" d="M 446 260 A 110 110 0 0 1 550 354" stroke="#2AB5C7" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#2AB5C7">\
-    <animateMotion id="houseToDishwasher" dur="3s" repeatCount="indefinite">\
-      <mpath href="#houseToDishwasherPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Waschmaschine -->\
+            <path id="houseToWasherPath" class="ring" d="M 446 240 A 110 110 0 0 0 550 145" stroke="#2AB5C7" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#2AB5C7" class="animated-point">\
+                <animateMotion id="houseToWasher" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#houseToWasherPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Solar zu Netz -->\
-  <path id="solarToGridPath" d="M 240 145 A 110 100 0 0 1 146 240" stroke="#FFE74B" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#FFE74B">\
-    <animateMotion id="solarToGrid" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#solarToGridPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Geschirrspüler -->\
+            <path id="houseToDishwasherPath" class="ring" d="M 446 260 A 110 110 0 0 1 550 354" stroke="#2AB5C7" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#2AB5C7" class="animated-point">\
+                <animateMotion id="houseToDishwasher" dur="3s" repeatCount="indefinite">\
+                    <mpath href="#houseToDishwasherPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Netz zu Batterie -->\
-  <path id="gridToBatteryPath" d="M 146 260 A 110 100 0 0 1 240 354" stroke="#01F2D2" stroke-width="2" fill="transparent"/>\
-  <circle id="gridToBatteryStatic" r="5" fill="#01F2D2" style="display:none;;" />\
-  <circle id="gridToBatteryForward" r="5" fill="#01F2D2" style="display:none;;">\
-    <animateMotion id="gridToBatteryForwardAnim" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#gridToBatteryPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Solar zu Netz -->\
+            <path id="solarToGridPath" d="M 240 145 A 110 100 0 0 1 146 240" stroke="#FFE74B" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#FFE74B">\
+                <animateMotion id="solarToGrid" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#solarToGridPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Batterie zu Netz -->\
-  <path id="batteryToGridPath" d="M 240 354 A 110 100 0 0 0 146 260" stroke="#01F2D2" stroke-width="2" fill="transparent"/>\
-  <circle id="batteryToGridForward" r="5" fill="#01F2D2" style="display:none;;">\
-    <animateMotion id="batteryToGridForwardAnim" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#batteryToGridPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Netz zu Batterie -->\
+            <path id="gridToBatteryPath" d="M 146 260 A 110 100 0 0 1 240 354" stroke="#01F2D2" stroke-width="2" fill="transparent" />\
+            <circle id="gridToBatteryStatic" r="5" fill="#01F2D2" style="display:none;;" />\
+            <circle id="gridToBatteryForward" r="5" fill="#01F2D2" style="display:none;;">\
+                <animateMotion id="gridToBatteryForwardAnim" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#gridToBatteryPath" />\
+                </animateMotion>\
+            </circle>\
 \
-</svg>\
-</div>\
+            <!-- Verbindungslinie von Batterie zu Netz -->\
+            <path id="batteryToGridPath" d="M 240 354 A 110 100 0 0 0 146 260" stroke="#01F2D2" stroke-width="2" fill="transparent" />\
+            <circle id="batteryToGridForward" r="5" fill="#01F2D2" style="display:none;;">\
+                <animateMotion id="batteryToGridForwardAnim" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#batteryToGridPath" />\
+                </animateMotion>\
+            </circle>\
+\
+            <script>\
+                function adjustViewBox() {\
+                    const svg = document.querySelector('#powerGrid svg');;\
+                    if (window.innerWidth < 1200) {\
+                      svg.setAttribute('viewBox', '0 0 500 500');;\
+                    } else {\
+                      svg.setAttribute('viewBox', '0 0 650 500');;\
+                    }\
+                  }\
+                \
+                  window.addEventListener('resize', adjustViewBox);;\
+                  window.addEventListener('load', adjustViewBox);;\
+            </script>\
+\
+        </svg>\
+    </div>\
 </body>\
-</html>\
-
+\
+</html>
 
 setstate powerGrid <!DOCTYPE html>\
 <html>\
+\
 <head>\
-<title>powerGrid</title>\
-<style>\
-#wrapper {\
-    background: black;;\
-}\
-svg {\
-    width: 100%;;\
-    height: auto;;\
-}\
-</style>\
+    <title>powerGrid</title>\
+    <style>\
+        /* Container für das SVG */\
+        #wrapper {\
+            background: black;;\
+            display: flex;;\
+            justify-content: center;;\
+        }\
+        \
+        /* SVG-Stile überschreiben */\
+        #powerGrid svg {\
+            background-color: black;;\
+            width: 90% !important;;\
+            height: auto;;\
+        }\
+        \
+        /* Mobile Ansicht */\
+        @media (max-width: 1200px) {\
+            #powerGrid svg {\
+                width: 850px !important;;\
+                height: auto;;\
+            }\
+        \
+            /* Verstecke alle Ringe */\
+            .ring {\
+                display: none !important;;\
+            }\
+        \
+            /* Verstecke animierte Punkte */\
+            .animated-point {\
+                animation: none !important;;\
+                visibility: hidden !important;;\
+            }\
+        }\
+    </style>\
 </head>\
+\
 <body>\
 \
-<div id="wrapper">\
-<svg viewBox="0 0 650 500" xmlns="http://www.w3.org/2000/svg" style="background-color: black;; width: 90%;; height: auto;;">\
- \
- <!-- Titel -->\
-  <text x="20" y="30" font-family="Arial" font-size="24" fill="white">Power Flow</text>\
+    <div id="wrapper">\
+        <svg  xmlns="http://www.w3.org/2000/svg">\
 \
-  <!-- Kohlenstoffarm -->\
-  <circle id="lowCarbonCircle" cx="100" cy="100" r="45" fill="none" stroke="#0ACC0A" stroke-width="10" opacity="0.4"/>\
-  <circle cx="100" cy="100" r="40" fill="none" stroke="#0ACC0A" stroke-width="5"/>\
-  <text x="100" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">FossilFree</text>\
-  <text id="lowCarbonPower" x="100" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">0 %</text>\
+            <!-- Titel -->\
+            <text x="20" y="30" font-family="Arial" font-size="24" fill="white">Power Flow</text>\
 \
-  <!-- Solar -->\
-  <circle id="solarCircle" cx="250" cy="100" r="45" fill="none" stroke="#FFE74B" stroke-width="10" opacity="0.4"/>\
-  <circle cx="250" cy="100" r="40" fill="none" stroke="#FFE74B" stroke-width="5"/>\
-  <text x="250" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Solar</text>\
-  <text id="solarPower" x="250" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Kohlenstoffarm -->\
+            <circle id="lowCarbonCircle" cx="100" cy="100" r="45" fill="none" stroke="#0ACC0A" stroke-width="10" opacity="0.4" />\
+            <circle cx="100" cy="100" r="40" fill="none" stroke="#0ACC0A" stroke-width="5" />\
+            <text x="100" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">FossilFree</text>\
+            <text id="lowCarbonPower" x="100" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">0 %</text>\
 \
-  <!-- Netz -->\
-  <rect x="55" y="205" rx="25" ry="25" width="90" height="90" fill="none" opacity="0.3" stroke="#006EFE" stroke-width="10"/>\
-  <rect x="60" y="210" rx="20" ry="20" width="80" height="80" fill="none" stroke="#006EFE" stroke-width="5" />  \
-  <text x="100" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Grid</text>\
-  <text id="gridPowerOut" x="100" y="235" font-family="Arial" font-size="12" fill="#FFE74B" text-anchor="middle" alignment-baseline="middle"></text>\
-  <text id="gridPowerIn" x="100" y="265" font-family="Arial" font-size="12" fill="#006EFE" text-anchor="middle" alignment-baseline="middle"></text>\
-  <text id="gridPower" x="100" y="280" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Solar -->\
+            <circle id="solarCircle" cx="250" cy="100" r="45" fill="none" stroke="#FFE74B" stroke-width="10" opacity="0.4" />\
+            <circle cx="250" cy="100" r="40" fill="none" stroke="#FFE74B" stroke-width="5" />\
+            <text x="250" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Solar</text>\
+            <text id="solarPower" x="250" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Batterie Label -->\
-  <text x="250" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Battery</text>\
-  <text id="batteryPower" x="250" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
-  <text id="batteryPercent" x="250" y="385" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Netz -->\
+            <rect x="55" y="205" rx="25" ry="25" width="90" height="90" fill="none" opacity="0.3" stroke="#006EFE" stroke-width="10" />\
+            <rect x="60" y="210" rx="20" ry="20" width="80" height="80" fill="none" stroke="#006EFE" stroke-width="5" />\
+            <text x="100" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Grid</text>\
+            <text id="gridPowerOut" x="100" y="235" font-family="Arial" font-size="12" fill="#FFE74B" text-anchor="middle" alignment-baseline="middle"></text>\
+            <text id="gridPowerIn" x="100" y="265" font-family="Arial" font-size="12" fill="#006EFE" text-anchor="middle" alignment-baseline="middle"></text>\
+            <text id="gridPower" x="100" y="280" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Batterie stop -->\
-  <circle id="batteryCircle" cx="250" cy="400" r="45" fill="none" stroke="#01F2D2" stroke-width="10" opacity="0.4"/>\
-  <circle id="batteryStatic" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5"/>\
+            <!-- Batterie Label -->\
+            <text x="250" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Battery</text>\
+            <text id="batteryPower" x="250" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <text id="batteryPercent" x="250" y="385" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Batterie dreht rechts -->\
-  <circle id="batteryClockwiseGridLoad" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
-    <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
-  </circle>\
+            <!-- Batterie stop -->\
+            <circle id="batteryCircle" cx="250" cy="400" r="45" fill="none" stroke="#01F2D2" stroke-width="10" opacity="0.4" />\
+            <circle id="batteryStatic" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" />\
 \
-  <!-- Batterie dreht rechts -->\
-  <circle id="batteryClockwiseHouseUnload" cx="250" cy="400" r="40" fill="none" stroke="purple" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
-    <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
-  </circle>\
+            <!-- Batterie dreht rechts -->\
+            <circle id="batteryClockwiseGridLoad" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
+                <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
+            </circle>\
 \
-  <!-- Batterie dreht rechts -->\
-  <circle id="batteryClockwiseSolarLoad" cx="250" cy="400" r="40" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
-    <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
-  </circle>\
+            <!-- Batterie dreht rechts -->\
+            <circle id="batteryClockwiseHouseUnload" cx="250" cy="400" r="40" fill="none" stroke="#F200FF" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
+                <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
+            </circle>\
 \
-  <!-- Batteriering dreht links -->\
-  <circle id="batteryCounterclockwiseGridUnload" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
-    <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="-360 250 400" dur="5s" repeatCount="indefinite" />\
-  </circle>\
+            <!-- Batterie dreht rechts -->\
+            <circle id="batteryClockwiseSolarLoad" cx="250" cy="400" r="40" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
+                <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="360 250 400" dur="5s" repeatCount="indefinite" />\
+            </circle>\
 \
-  <!-- Haus + Ringsegmente -->\
-  <circle id="houseCircle" cx="400" cy="250" r="45" fill="none" stroke="purple" stroke-width="10" opacity="0.4"/>\
-  <circle id="solarSegment" cx="400" cy="250" r="40" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="0 100" />\
-  <circle id="gridSegment" cx="400" cy="250" r="40" fill="none" stroke="blue" stroke-width="5" stroke-dasharray="0 100" />\
-  <circle id="batterySegment" cx="400" cy="250" r="40" fill="none" stroke="purple" stroke-width="5" stroke-dasharray="0 100" />\
-  <text x="400" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">House</text>\
-  <text id="housePower" x="400" y="265" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Batteriering dreht links -->\
+            <circle id="batteryCounterclockwiseGridUnload" cx="250" cy="400" r="40" fill="none" stroke="#01F2D2" stroke-width="5" stroke-dasharray="9 5" stroke-dashoffset="3" style="display:none;;">\
+                <animateTransform attributeName="transform" type="rotate" from="0 250 400" to="-360 250 400" dur="5s" repeatCount="indefinite" />\
+            </circle>\
 \
-  <!-- Lufttrockner -->\
-  <circle id="airDryerCircle" cx="400" cy="100" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4"/>\
-  <circle cx="400" cy="100" r="40" fill="none" stroke="#32AFFF" stroke-width="5"/>\
-  <text x="400" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Airdryer</text>\
-  <text id="airdryerPower" x="400" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Haus + Ringsegmente -->\
+            <circle id="houseCircle" cx="400" cy="250" r="45" fill="none" stroke="#F200FF" stroke-width="10" opacity="0.4" />\
+            <circle id="solarSegment" cx="400" cy="250" r="40" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="0 100" />\
+            <circle id="gridSegment" cx="400" cy="250" r="40" fill="none" stroke="blue" stroke-width="5" stroke-dasharray="0 100" />\
+            <circle id="batterySegment" cx="400" cy="250" r="40" fill="none" stroke="#F200FF" stroke-width="5" stroke-dasharray="0 100" />\
+            <text x="400" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">House</text>\
+            <text id="housePower" x="400" y="265" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Kühlschrank -->\\
-  <circle id="fridgeCircle" cx="400" cy="400" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4"/>\
-  <circle cx="400" cy="400" r="40" fill="none" stroke="#32AFFF" stroke-width="5"/>\
-  <text x="400" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Fridge</text>\
-  <text id="fridgePower" x="400" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Lufttrockner -->\
+            <circle id="airDryerCircle" class="ring" cx="400" cy="100" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="400" cy="100" r="40" fill="none" stroke="#32AFFF" stroke-width="5" />\
+            <text class="ring" x="400" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Airdryer</text>\
+            <text id="airdryerPower" class="ring" x="400" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Waschmaschine -->\
-  <circle id="washerCircle" cx="550" cy="100" r="45" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4"/>\
-  <circle cx="550" cy="100" r="40" fill="none" stroke="#2AB5C7" stroke-width="5"/>\
-  <text x="550" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Washer</text>\
-  <text id="washerPower" x="550" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Kühlschrank -->\\
+            <circle id="fridgeCircle" class="ring" cx="400" cy="400" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="400" cy="400" r="40" fill="none" stroke="#32AFFF" stroke-width="5" />\
+            <text class="ring" x="400" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Fridge</text>\
+            <text id="fridgePower" class="ring" x="400" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Trockner -->\
-  <circle id="dryerCircle" cx="550" cy="250" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4"/>\
-  <circle cx="550" cy="250" r="40" fill="none" stroke="#32AFFF" stroke-width="5"/>\
-  <text x="550" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Dryer</text>\
-  <text id="dryerPower" x="550" y="265" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Waschmaschine -->\
+            <circle id="washerCircle" class="ring" cx="550" cy="100" r="45" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="550" cy="100" r="40" fill="none" stroke="#2AB5C7" stroke-width="5" />\
+            <text class="ring" x="550" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Washer</text>\
+            <text id="washerPower" class="ring" x="550" y="115" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Geschirrspüler -->\
-  <circle id="dishwasherCircle" cx="550" cy="400" r="45" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4"/>\
-  <circle cx="550" cy="400" r="40" fill="none" stroke="#2AB5C7" stroke-width="5"/>\
-  <text x="550" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Dishwasher</text>\
-  <text id="dishwasherPower" x="550" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
+            <!-- Trockner -->\
+            <circle id="dryerCircle" class="ring" cx="550" cy="250" r="45" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="550" cy="250" r="40" fill="none" stroke="#32AFFF" stroke-width="5" />\
+            <text class="ring" x="550" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Dryer</text>\
+            <text id="dryerPower" class="ring" x="550" y="265" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Verbindungslinien -->\
+            <!-- Geschirrspüler -->\
+            <circle id="dishwasherCircle" class="ring" cx="550" cy="400" r="45" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4" />\
+            <circle class="ring" cx="550" cy="400" r="40" fill="none" stroke="#2AB5C7" stroke-width="5" />\
+            <text class="ring" x="550" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">Dishwasher</text>\
+            <text id="dishwasherPower" class="ring" x="550" y="415" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle"></text>\
 \
-  <!-- Verbindungslinie von Netz zu Haus und Solar zu Batterie -->\
-  <path id="solarToBatteryPath" d="M 250 145 A 0 100 0 0 1 250 354" stroke="#FFE74B" stroke-width="2" fill="transparent"/>\
-  <path id="gridToHousePath" d="M 146 250 H 357" stroke="blue" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="blue">\
-    <animateMotion id="gridToHouse" dur="3s" repeatCount="indefinite">\
-      <mpath href="#gridToHousePath"/>\
-    </animateMotion>\
-  </circle>\
-  <circle r="5" fill="#FFE74B">\
-    <animateMotion id="solarToBattery" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#solarToBatteryPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinien -->\
 \
-  <!-- Verbindungslinie von Batterie zu Haus --> \
-  <path id="batteryToHousePath" d="M 260 354 A 110 100 0 0 1 357 260" stroke="purple" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="purple">\
-    <animateMotion id="batteryToHouse" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#batteryToHousePath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Netz zu Haus und Solar zu Batterie -->\
+            <path id="solarToBatteryPath" d="M 250 145 A 0 100 0 0 1 250 354" stroke="#FFE74B" stroke-width="2" fill="transparent" />\
+            <path id="gridToHousePath" d="M 146 250 H 357" stroke="blue" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="blue">\
+                <animateMotion id="gridToHouse" dur="3s" repeatCount="indefinite">\
+                    <mpath href="#gridToHousePath" />\
+                </animateMotion>\
+            </circle>\
+            <circle r="5" fill="#FFE74B">\
+                <animateMotion id="solarToBattery" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#solarToBatteryPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Solar zu Haus -->\
-  <path id="solarToHousePath" d="M 260 145 A 110 100 0 0 0 357 240" stroke="#FFE74B" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#FFE74B">\
-    <animateMotion id="solarToHouse" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#solarToHousePath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Batterie zu Haus -->\
+            <path id="batteryToHousePath" d="M 260 354 A 110 100 0 0 1 357 260" stroke="#F200FF" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#F200FF">\
+                <animateMotion id="batteryToHouse" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#batteryToHousePath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Haus zu Lufttrockner -->\
-  <path id="houseToAirdryerPath" d="M 400 203 A 0 67 0 0 1 400 145" stroke="#32AFFF" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#32AFFF">\
-    <animateMotion id="houseToAirdryer" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#houseToAirdryerPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Solar zu Haus -->\
+            <path id="solarToHousePath" d="M 260 145 A 110 100 0 0 0 357 240" stroke="#FFE74B" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#FFE74B">\
+                <animateMotion id="solarToHouse" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#solarToHousePath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Haus zu Kühlschrank -->\
-  <path id="houseToFridgePath" d="M 400 298 A 0 67 0 0 1 400 354" stroke="#32AFFF" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#32AFFF">\
-    <animateMotion id="houseToFridge" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#houseToFridgePath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Lufttrockner -->\
+            <path id="houseToAirdryerPath" class="ring" d="M 400 203 A 0 67 0 0 1 400 145" stroke="#32AFFF" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#32AFFF" class="animated-point">\
+                <animateMotion id="houseToAirdryer" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#houseToAirdryerPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Netz zu Kohlenstoffarm -->\
-  <path id="gridToLowCarbonPath" d="M 100 145 A 0 68 0 0 1 100 208" stroke="#30FF24" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#30FF24">\
-    <animateMotion id="gridToLowCarbon" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#gridToLowCarbonPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Kühlschrank -->\
+            <path id="houseToFridgePath" class="ring" d="M 400 298 A 0 67 0 0 1 400 354" stroke="#32AFFF" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#32AFFF" class="animated-point">\
+                <animateMotion id="houseToFridge" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#houseToFridgePath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Haus zu Trockner -->\
-  <path id="houseToDryerPath" d="M 446 250 A 0 0 0 0 1 505 250" stroke="#32AFFF" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#32AFFF">\
-    <animateMotion id="houseToDryer" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#houseToDryerPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Netz zu Kohlenstoffarm -->\
+            <path id="gridToLowCarbonPath" d="M 100 145 A 0 68 0 0 1 100 208" stroke="#30FF24" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#30FF24">\
+                <animateMotion id="gridToLowCarbon" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#gridToLowCarbonPath" />\
+                </animateMotion>\
+            </circle>\
 \
-    <!-- Verbindungslinie von Haus zu Waschmaschine -->\
-  <path id="houseToWasherPath" d="M 446 240 A 110 110 0 0 0 550 145" stroke="#2AB5C7" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#2AB5C7">\
-    <animateMotion id="houseToWasher" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#houseToWasherPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Trockner -->\
+            <path id="houseToDryerPath" class="ring" d="M 446 250 A 0 0 0 0 1 505 250" stroke="#32AFFF" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#32AFFF" class="animated-point">\
+                <animateMotion id="houseToDryer" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#houseToDryerPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Haus zu Geschirrspüler -->\
-  <path id="houseToDishwasherPath" d="M 446 260 A 110 110 0 0 1 550 354" stroke="#2AB5C7" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#2AB5C7">\
-    <animateMotion id="houseToDishwasher" dur="3s" repeatCount="indefinite">\
-      <mpath href="#houseToDishwasherPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Waschmaschine -->\
+            <path id="houseToWasherPath" class="ring" d="M 446 240 A 110 110 0 0 0 550 145" stroke="#2AB5C7" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#2AB5C7" class="animated-point">\
+                <animateMotion id="houseToWasher" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#houseToWasherPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Solar zu Netz -->\
-  <path id="solarToGridPath" d="M 240 145 A 110 100 0 0 1 146 240" stroke="#FFE74B" stroke-width="2" fill="transparent"/>\
-  <circle r="5" fill="#FFE74B">\
-    <animateMotion id="solarToGrid" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#solarToGridPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Haus zu Geschirrspüler -->\
+            <path id="houseToDishwasherPath" class="ring" d="M 446 260 A 110 110 0 0 1 550 354" stroke="#2AB5C7" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#2AB5C7" class="animated-point">\
+                <animateMotion id="houseToDishwasher" dur="3s" repeatCount="indefinite">\
+                    <mpath href="#houseToDishwasherPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Netz zu Batterie -->\
-  <path id="gridToBatteryPath" d="M 146 260 A 110 100 0 0 1 240 354" stroke="#01F2D2" stroke-width="2" fill="transparent"/>\
-  <circle id="gridToBatteryStatic" r="5" fill="#01F2D2" style="display:none;;" />\
-  <circle id="gridToBatteryForward" r="5" fill="#01F2D2" style="display:none;;">\
-    <animateMotion id="gridToBatteryForwardAnim" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#gridToBatteryPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Solar zu Netz -->\
+            <path id="solarToGridPath" d="M 240 145 A 110 100 0 0 1 146 240" stroke="#FFE74B" stroke-width="2" fill="transparent" />\
+            <circle r="5" fill="#FFE74B">\
+                <animateMotion id="solarToGrid" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#solarToGridPath" />\
+                </animateMotion>\
+            </circle>\
 \
-  <!-- Verbindungslinie von Batterie zu Netz -->\
-  <path id="batteryToGridPath" d="M 240 354 A 110 100 0 0 0 146 260" stroke="#01F2D2" stroke-width="2" fill="transparent"/>\
-  <circle id="batteryToGridForward" r="5" fill="#01F2D2" style="display:none;;">\
-    <animateMotion id="batteryToGridForwardAnim" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
-      <mpath href="#batteryToGridPath"/>\
-    </animateMotion>\
-  </circle>\
+            <!-- Verbindungslinie von Netz zu Batterie -->\
+            <path id="gridToBatteryPath" d="M 146 260 A 110 100 0 0 1 240 354" stroke="#01F2D2" stroke-width="2" fill="transparent" />\
+            <circle id="gridToBatteryStatic" r="5" fill="#01F2D2" style="display:none;;" />\
+            <circle id="gridToBatteryForward" r="5" fill="#01F2D2" style="display:none;;">\
+                <animateMotion id="gridToBatteryForwardAnim" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#gridToBatteryPath" />\
+                </animateMotion>\
+            </circle>\
 \
-</svg>\
-</div>\
+            <!-- Verbindungslinie von Batterie zu Netz -->\
+            <path id="batteryToGridPath" d="M 240 354 A 110 100 0 0 0 146 260" stroke="#01F2D2" stroke-width="2" fill="transparent" />\
+            <circle id="batteryToGridForward" r="5" fill="#01F2D2" style="display:none;;">\
+                <animateMotion id="batteryToGridForwardAnim" dur="3s" repeatCount="indefinite" keyPoints="0;;1" keyTimes="0;;1">\
+                    <mpath href="#batteryToGridPath" />\
+                </animateMotion>\
+            </circle>\
+\
+            <script>\
+                function adjustViewBox() {\
+                    const svg = document.querySelector('#powerGrid svg');;\
+                    if (window.innerWidth < 1200) {\
+                      svg.setAttribute('viewBox', '0 0 500 500');;\
+                    } else {\
+                      svg.setAttribute('viewBox', '0 0 650 500');;\
+                    }\
+                  }\
+                \
+                  window.addEventListener('resize', adjustViewBox);;\
+                  window.addEventListener('load', adjustViewBox);;\
+            </script>\
+\
+        </svg>\
+    </div>\
 </body>\
-</html>\
+\
+</html>
+
 ```
 
 **5. Mein DOIF**
