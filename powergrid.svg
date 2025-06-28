@@ -1,0 +1,1198 @@
+<svg id="mySVG" xmlns="http://www.w3.org/2000/svg">
+  <style>
+
+    tr.odd.devname_powergrid td:first-child {
+        display: none;
+    } 
+
+    div#powergrid {
+        pointer-events: none;
+    }
+
+    div#powergrid a {
+        pointer-events: auto;
+    }
+
+    /* Mobile Ansicht */
+    @media (max-width: 1200px) {
+        #powergrid svg {
+            width: 500px !important;
+            height: auto;
+        }
+
+        /* Verstecke alle Ringe */
+        .ringHide {
+            display: none !important;
+        }
+
+        /* Verstecke animierte Punkte */
+        .houseTocCircle1,
+        .houseTocCircle2,
+        .houseTocCircle3,
+        .houseTocCircle4,
+        .houseTocCircle5,
+        .houseTocCircle6,
+        .houseTocCircle7,
+        .houseTocCircle8,
+        .houseTocCircle9 {
+            display: none !important;
+            animation: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+    }
+
+    @keyframes pulse-grid-solar {
+        0%, 100% {
+            r: 46px;
+            opacity: 0.4;
+        }
+        50% {
+            r: 40px;
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulse-house-grid-unload {
+        0%, 100% {
+            r: 40px;
+            opacity: 0.4;
+        }
+        50% {
+            r: 46px;
+            opacity: 1;
+        }
+    }
+
+    #batteryCircle {
+        stroke-width: 5;
+        fill: none;
+        transition: stroke 0.3s ease-in-out;
+        transform-origin: 50% 80%;
+    }
+
+    .battery-stop {
+        stroke: #01F2D2;
+    }
+
+    .battery-gridLoad {
+        stroke: #01F2D2;
+        animation: pulse-grid-solar 1s infinite;
+    }
+
+    .battery-gridUnload {
+        stroke: #01F2D2;
+        animation: pulse-house-grid-unload 1s infinite;
+    }
+
+    .battery-solarLoad {
+        stroke: #FFE74B;
+        animation: pulse-grid-solar 1s infinite;
+    }
+
+    .battery-houseUnload {
+        stroke: #F200FF;
+        animation: pulse-house-grid-unload 1s infinite;
+    }
+
+    @keyframes movegridToLowCarbon {
+      0% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-gridToLowCarbon {
+      animation: movegridToLowCarbon 1.5s infinite linear;
+      will-change: transform;
+      offset-path: path("M 100 145 A 0 68 0 0 1 100 205");
+    }
+
+
+    @keyframes moveSolarToGrid {
+      0% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-solarToGrid {
+      animation: moveSolarToGrid 2s infinite linear;
+      will-change: transform;
+      offset-path: path("M 240 148 c 0 90 -10 90 -95 90");
+    }
+
+    @keyframes moveSolarToHouse {
+      0% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-solarToHouse {
+      animation: moveSolarToHouse 2s infinite linear;
+      will-change: transform;
+      offset-path: path("M 260 148 c 1 90 10 90 95 90");
+    }
+
+    @keyframes moveBatteryToHouse {
+      0% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-batteryToHouse {
+      animation: moveBatteryToHouse 2s infinite linear;
+      will-change: transform;
+      offset-path: path("M 260 354 c 0 -90 10 -90 95 -90");
+    }
+
+    @keyframes moveGridToHouse {
+      0% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-gridToHouse {
+      animation: moveGridToHouse 2s infinite linear;
+      will-change: transform;
+      offset-path: path("M146 250 L352 250");
+    }
+
+    @keyframes moveSolarToBattery {
+      0% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-solarToBattery {
+      animation: moveSolarToBattery 2s infinite linear;
+      will-change: transform;
+      offset-path: path("M250 148 L250 352");
+    }
+
+    @keyframes moveGridToBattery {
+      0% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-gridToBattery {
+      animation: moveGridToBattery 2s infinite linear;
+      will-change: transform;
+      offset-path: path("M 145 264 c 94 0 91 0 95 90");
+    }
+
+    @keyframes movebatteryToGrid {
+      0% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-batteryToGrid {
+      animation: movebatteryToGrid 2s infinite linear;
+      will-change: transform;
+      offset-path: path("M 145 264 c 94 0 91 0 95 90");
+    }
+
+    @keyframes moveCircle1 {
+      0% {
+        offset-distance: 0%;
+        opacity: 1;
+      }
+      100% {
+        offset-distance: 100%;
+        opacity: 1;
+      }
+    }
+
+    .motion-enabled-circle1 {
+      animation: moveCircle1 1.5s infinite linear;
+      will-change: transform;
+      offset-path: path("M 400 203 A 0 67 0 0 1 400 145");
+    }
+
+    @keyframes moveCircle2 {
+        0% {
+            offset-distance: 0%;
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 1;
+        }
+    }
+
+    .motion-enabled-circle2 {
+        animation: moveCircle2 1.5s infinite linear;
+        will-change: transform;
+        offset-path: path("M 400 297 A 0 67 0 0 1 400 355");
+    }
+
+    @keyframes moveCircle3 {
+        0% {
+            offset-distance: 0%;
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 1;
+        }
+    }
+
+    .motion-enabled-circle3 {
+        animation: moveCircle3 2s infinite linear;
+        will-change: transform;
+        offset-path: path("M 445 237 c 105 0 105 -10 105 -90");
+    }
+
+    @keyframes moveCircle4 {
+        0% {
+            offset-distance: 0%;
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 1;
+        }
+    }
+
+    .motion-enabled-circle4 {
+        animation: moveCircle4 2s infinite linear;
+        will-change: transform;
+        offset-path: path("M 445 264 c 105 0 105 0 105 90");
+    }
+
+    @keyframes moveCircle5 {
+        0% {
+            offset-distance: 0%;
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 1;
+        }
+    }
+
+    .motion-enabled-circle5 {
+        animation: moveCircle5 3s infinite linear;
+        will-change: transform;
+        offset-path: path("M 445 237 c 255 0 255 -10 255 -90");
+    }
+
+    @keyframes moveCircle6 {
+        0% {
+            offset-distance: 0%;
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 1;
+        }
+    }
+
+    .motion-enabled-circle6 {
+        animation: moveCircle6 3s infinite linear;
+        will-change: transform;
+        offset-path: path("M 445 264 c 255 0 255 0 255 90");
+    }
+
+    @keyframes moveCircle7 {
+        0% {
+            offset-distance: 0%;
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 1;
+        }
+    }
+
+    .motion-enabled-circle7 {
+        animation: moveCircle7 4s infinite linear;
+        will-change: transform;
+        offset-path: path("M 445 237 c 355 0 355 -10 385 -92");
+    }
+
+    @keyframes moveCircle8 {
+        0% {
+            offset-distance: 0%;
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 1;
+        }
+    }
+
+    .motion-enabled-circle8 {
+        animation: moveCircle8 3.5s infinite linear;
+        will-change: transform;
+        offset-path: path("M 446 250 A 0 0 0 0 1 805 250");
+    }
+
+    @keyframes moveCircle9 {
+        0% {
+            offset-distance: 0%;
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 1;
+        }
+    }
+
+    .motion-enabled-circle9 {
+        animation: moveCircle9 4s infinite linear;
+        will-change: transform;
+        offset-path: path("M 445 264 c 355 0 355 0 385 92");
+    }
+
+
+    /* Hausringanimation */
+    #solarSegment,
+    #gridSegment,
+    #batterySegment {
+        will-change: stroke-dasharray, stroke-dashoffset;
+        transition: stroke-dasharray 4s ease-in-out, stroke-dashoffset 4s ease-in-out;
+    }
+
+    .motion-disabled {
+      animation: none;
+      visibility: hidden;
+    }
+
+  </style>
+
+  <g id="do_weblink"></g>
+
+  <!-- Verbindungslinie von Grid zu House und Solar zu Battery -->
+  <path id="gridToHousePath" d="M146,250 L352,250" stroke="blue" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <path id="solarToBatteryPath" d="M250,148 L250,352" stroke="yellow" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="gridToHouseCircle" class="motion-disabled" r="5" fill="blue" />
+  <circle id="solarToBatteryCircle" class="motion-disabled" r="5" fill="yellow" />
+
+  <!-- Verbindungslinie von Netz zu Kohlenstoffarm -->
+  <path id="gridToLowCarbonPath" d="M 100 145 A 0 68 0 0 1 100 205" stroke="#30FF24" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="gridToLowCarbonCircle" class="motion-disabled" r="5" fill="#30FF24" />
+
+  <!-- Verbindungslinie von Solar zu Netz -->
+  <path id="solarToGridPath" d="M 240 148 c 0 90 -10 90 -95 90" stroke="#FFE74B" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="solarToGridCircle" class="motion-disabled" r="5" fill="#FFE74B" />
+
+  <!-- Verbindungslinie von Solar zu Haus -->
+  <path id="solarToHousePath" d="M 260 148 c 1 90 10 90 95 90" stroke="#FFE74B" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="solarToHouseCircle" class="motion-disabled" r="5" fill="#FFE74B" />
+
+  <!-- Verbindungslinie von Batterie zu Haus -->
+  <path id="batteryToHousePath" d="M 260 354 c 0 -90 10 -90 95 -90" stroke="#F200FF" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="batteryToHouseCircle" class="motion-disabled" r="5" fill="#F200FF" />
+
+  <text x="238" y="470" font-size="12" text-anchor="central" fill="transparent">
+      <tspan class="informId_ringSVG:batteryState_v">0</tspan>
+  </text>
+
+  <!-- Verbindungslinie von Netz zu Batterie -->
+  <path id="gridToBatteryPath" d="M 145 264 c 94 0 91 0 95 90" stroke="#01F2D2" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="gridToBatteryCircle" class="motion-disabled" r="5" fill="#01F2D2" />
+
+  <!-- Verbindungslinie von Batterie zu Netz -->
+  <path id="batteryToGridPath" d="M 240 354 c 0 -96 -12 -90 -95 -90" stroke="#01F2D2" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="batteryToGridCircle" class="motion-disabled" r="5" fill="#01F2D2" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefiniertem Ring_1 -->
+  <path id="houseTocCircle1Path" class="ringHide" d="M 400 203 A 0 67 0 0 1 400 145" stroke="#32AFFF" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="houseTocCircle1" class="ringHide motion-disabled" r="5" fill="#32AFFF" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefiniertem Ring_2 -->
+  <path id="houseTocCircle2Path" class="ringHide" d="M 400 297 A 0 67 0 0 1 400 355" stroke="#32AFFF" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+ <circle id="houseTocCircle2" class="ringHide motion-disabled" r="5" fill="#32AFFF" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefiniertem Ring_3 -->
+  <path id="houseTocCircle3Path" class="ringHide" d="M 445 237	 c 105 0 105 -10 105 -90" stroke="#2AB5C7" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="houseTocCircle3" class="ringHide motion-disabled" r="5" fill="#2AB5C7" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefiniertem Ring_4 -->
+  <path id="houseTocCircle4Path" class="ringHide" d="M 445 264 c 105 0 105 0 105 90" stroke="#2AB5C7" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="houseTocCircle4" class="ringHide motion-disabled" r="5" fill="#2AB5C7" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefiniertem Ring_5 -->
+  <path id="houseTocCircle5Path" class="ringHide" d="M 445 237 c 255 0 255 -10 255 -90" stroke="#32AFFF" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="houseTocCircle5" class="ringHide motion-disabled" r="5" fill="#32AFFF" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefiniertem Ring_6 -->
+  <path id="houseTocCircle6Path" class="ringHide" d="M 445 264 c 255 0 255 0 255 90" stroke="#32AFFF" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="houseTocCircle6" class="ringHide motion-disabled" r="5" fill="#32AFFF" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefiniertem Ring_7 -->
+  <path id="houseTocCircle7Path" class="ringHide" d="M 445 237 c 355 0 355 -10 385 -92" stroke="#2AB5C7" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="houseTocCircle7" class="ringHide motion-disabled" r="5" fill="#2AB5C7" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefiniertem Ring_8 -->
+  <path id="houseTocCircle8Path" class="ringHide" d="M 446 250 A 0 0 0 0 1 805 250" stroke="#32AFFF" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke"/>
+  <circle id="houseTocCircle8" class="ringHide motion-disabled" r="5" fill="#32AFFF" />
+
+  <!-- Verbindungslinie von Haus zu Benutzerdefinierter Ring_9 -->
+  <path id="houseTocCircle9Path" class="ringHide" d="M 445 264 c 355 0 355 0 385 92" stroke="#2AB5C7" stroke-width="2" fill="transparent" vector-effect="non-scaling-stroke" />
+  <circle id="houseTocCircle9" class="ringHide motion-disabled" r="5" fill="#2AB5C7" />
+
+  <!-- Kohlenstoffarm -->
+  <circle cx="100" cy="100" r="43" fill="none" stroke="#0ACC0A" stroke-width="10" opacity="0.4" />
+  <circle cx="100" cy="100" r="42" fill="none" stroke="#0ACC0A" stroke-width="5" />
+  <g id="fossilfreeCircleIcon" transform="translate(90,65)"></g>
+  <text x="100" y="100" font-family="Arial" font-family="Arial" font-size="12" fill="white" text-anchor="middle">FossilFree</text>
+  <text x="100" y="115" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:lowcarbon_v">0</tspan> %
+  </text>
+
+  <!-- Solar -->
+  <circle cx="250" cy="100" r="43" fill="none" stroke="#FFE74B" stroke-width="10" opacity="0.4" />
+  <circle cx="250" cy="100" r="42" fill="none" stroke="#FFE74B" stroke-width="5" />
+  <g id="solarCircleIcon" transform="translate(238,65)"></g>
+  <text x="250" y="100" font-family="Arial" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Solar</text>
+  <text x="250" y="115" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:solar_v">0</tspan> W
+  </text>
+  <g id="solarLink"></g>
+
+
+  <!-- Netz -->
+  <rect x="55" y="205" rx="25" ry="25" width="90" height="90" fill="none" opacity="0.3" stroke="#006EFE" stroke-width="5" />
+  <rect x="60" y="210" rx="20" ry="20" width="80" height="80" fill="none" stroke="#006EFE" stroke-width="5" />
+  <text x="100" y="250" font-family="Arial" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Grid</text>
+  <text x="100" y="235" font-size="12" text-anchor="middle" fill="yellow">
+      <tspan class="informId_ringSVG:grid_out_v">0</tspan> kWh
+  </text>
+  <text x="100" y="265" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:grid_v">0</tspan> W
+  </text>
+  <text x="100" y="280" font-size="12" text-anchor="middle" fill="#00aefe">
+      <tspan class="informId_ringSVG:grid_in_v">0</tspan> kWh
+  </text>
+  <g id="gridLink"></g>
+
+  <!-- Batterie -->
+  <text x="250" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Battery</text>
+  <text x="250" y="385" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:battery_p">0</tspan> %
+  </text>
+  <text x="250" y="415" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:battery_v">0</tspan> W
+  </text>
+  <circle id="batteryStatic" cx="250" cy="400" r="43" fill="none" stroke="#01F2D2" stroke-width="10" opacity="0.4" />
+  <circle id="batteryCircle" cx="250" cy="400" r="42" fill="none" stroke="#01F2D2" stroke-width="5" />
+  <g id="batteryLink"></g>
+
+  <!-- Haus + Ringsegmente -->
+  <circle id="houseCircle" cx="400" cy="250" r="43" fill="none" stroke="#F200FF" stroke-width="10" opacity="0.4" />
+  <g id="houseCircleIcon" transform="translate(388,215)"></g>
+  <circle id="solarSegment" cx="400" cy="250" r="42" fill="none" stroke="#FFE74B" stroke-width="5" stroke-dasharray="0 100" />
+  <circle id="gridSegment" cx="400" cy="250" r="42" fill="none" stroke="blue" stroke-width="5" stroke-dasharray="0 100" />
+  <circle id="batterySegment" cx="400" cy="250" r="42" fill="none" stroke="#F200FF" stroke-width="5" stroke-dasharray="0 100" />
+  <text x="400" y="250" font-family="Arial" font-family="Arial" font-size="12" fill="white" text-anchor="middle">House</text>
+  <text x="400" y="265" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:house_v">0</tspan> W
+  </text>
+
+  <!-- Benutzerdefinierter Ring_1 -->
+  <circle id="cCircle1ShowOrNot1" class="ringHide" cx="400" cy="100" r="43" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle1ShowOrNot2" class="ringHide" cx="400" cy="100" r="42" fill="none" stroke="#32AFFF" stroke-width="5" />
+  <g id="cCircle1Icon" class="ringHide" transform="translate(388, 65)"></g>
+  <text id="cCircle1Name" class="ringHide" x="400" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle1Name_s"></tspan>
+  </text>
+  <text id="cCircle1Power" class="ringHide" x="400" y="115" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle1Power_v">0</tspan> W
+  </text>
+  <g id="cCircle1Link" class="ringHide"></g>
+
+  <!-- Benutzerdefinierter Ring_2 -->
+  <circle id="cCircle2ShowOrNot1" class="ringHide" cx="400" cy="400" r="43" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle2ShowOrNot2" class="ringHide" cx="400" cy="400" r="42" fill="none" stroke="#32AFFF" stroke-width="5" />
+  <g id="cCircle2Icon" class="ringHide" transform="translate(388, 365)"></g>
+  <text id="cCircle2Name" class="ringHide" x="400" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle2Name_s"></tspan>
+  </text>
+  <text id="cCircle2Power" class="ringHide" x="400" y="415" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle2Power_v">0</tspan> W
+  </text>
+  <g id="cCircle2Link" class="ringHide"></g>
+
+  <!-- Benutzerdefinierter Ring_3 -->
+  <circle id="cCircle3ShowOrNot1" class="ringHide" cx="550" cy="100" r="43" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle3ShowOrNot2" class="ringHide" cx="550" cy="100" r="42" fill="none" stroke="#2AB5C7" stroke-width="5" />
+  <g id="cCircle3Icon" class="ringHide" transform="translate(538, 65)"></g>
+  <text id="cCircle3Name" class="ringHide" x="550" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle3Name_s"></tspan>
+  </text>
+  <text id="cCircle3Power" class="ringHide" x="550" y="115" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle3Power_v">0</tspan> W
+  </text>
+  <g id="cCircle3Link" class="ringHide"></g>
+
+  <!-- Benutzerdefinierter Ring_4 -->
+  <circle id="cCircle4ShowOrNot1" class="ringHide" cx="550" cy="400" r="43" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle4ShowOrNot2" class="ringHide" cx="550" cy="400" r="42" fill="none" stroke="#2AB5C7" stroke-width="5" />
+  <g id="cCircle4Icon" class="ringHide" transform="translate(538, 365)"></g>
+  <text id="cCircle4Name" class="ringHide" x="550" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle4Name_s"></tspan>
+  </text>
+  <text id="cCircle4Power" class="ringHide" x="550" y="415" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle4Power_v">0</tspan> W
+  </text>
+  <g id="cCircle4Link" class="ringHide"></g>
+
+  <!-- Benutzerdefinierter Ring_5 -->
+  <circle id="cCircle5ShowOrNot1" class="ringHide" cx="700" cy="100" r="43" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle5ShowOrNot2" class="ringHide" cx="700" cy="100" r="42" fill="none" stroke="#32AFFF" stroke-width="5" />
+  <g id="cCircle5Icon" class="ringHide" transform="translate(688, 65)"></g>
+  <text id="cCircle5Name" class="ringHide" x="700" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle5Name_s"></tspan>
+  </text>
+  <text id="cCircle5Power" class="ringHide" x="700" y="115" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle5Power_v">0</tspan> W
+  </text>
+  <g id="cCircle5Link" class="ringHide"></g>
+
+  <!-- Benutzerdefinierter Ring_6 -->
+  <circle id="cCircle6ShowOrNot1" class="ringHide" cx="700" cy="400" r="43" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle6ShowOrNot2" class="ringHide" cx="700" cy="400" r="42" fill="none" stroke="#32AFFF" stroke-width="5" />
+  <g id="cCircle6Icon" class="ringHide" transform="translate(688, 365)"></g>
+  <text id="cCircle6Name" class="ringHide" x="700" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle6Name_s"></tspan>
+  </text>
+  <text id="cCircle6Power" class="ringHide" x="700" y="415" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle6Power_v">0</tspan> W
+  </text>
+  <g id="cCircle6Link" class="ringHide"></g>
+
+  <!-- Benutzerdefinierter Ring_7 -->
+  <circle id="cCircle7ShowOrNot1" class="ringHide" cx="850" cy="100" r="43" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle7ShowOrNot2" class="ringHide" cx="850" cy="100" r="42" fill="none" stroke="#2AB5C7" stroke-width="5" />
+  <g id="cCircle7Icon" class="ringHide" transform="translate(838, 65)"></g>
+  <text id="cCircle7Name" class="ringHide" x="850" y="100" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle7Name_s"></tspan>
+  </text>
+  <text id="cCircle7Power" class="ringHide" x="850" y="115" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle7Power_v">0</tspan> W
+  </text>
+  <g id="cCircle7Link" class="ringHide"></g>
+
+  <!-- Benutzerdefinierter Ring_8 -->
+  <circle id="cCircle8ShowOrNot1" class="ringHide" cx="850" cy="250" r="43" fill="none" stroke="#32AFFF" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle8ShowOrNot2" class="ringHide" cx="850" cy="250" r="42" fill="none" stroke="#32AFFF" stroke-width="5" />
+  <g id="cCircle8Icon" class="ringHide" transform="translate(838, 215)"></g>
+  <text id="cCircle8Name" class="ringHide" x="850" y="250" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle8Name_s"></tspan>
+  </text>
+  <text id="cCircle8Power" class="ringHide" x="850" y="265" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle8Power_v">0</tspan> W
+  </text>
+  <g id="cCircle8Link" class="ringHide"></g>
+
+  <!-- Benutzerdefinierter Ring_9 -->
+  <circle id="cCircle9ShowOrNot1" class="ringHide" cx="850" cy="400" r="43" fill="none" stroke="#2AB5C7" stroke-width="10" opacity="0.4" />
+  <circle id="cCircle9ShowOrNot2" class="ringHide" cx="850" cy="400" r="42" fill="none" stroke="#2AB5C7" stroke-width="5" />
+  <g id="cCircle9Icon" class="ringHide" transform="translate(838, 365)"></g>
+  <text id="cCircle9Name" class="ringHide" x="850" y="400" font-family="Arial" font-size="12" fill="white" text-anchor="middle" alignment-baseline="middle">
+      <tspan class="informId_ringSVG:cCircle9Name_s"></tspan>
+  </text>
+  <text id="cCircle9Power" class="ringHide" x="850" y="415" font-size="12" text-anchor="middle" fill="white">
+      <tspan class="informId_ringSVG:cCircle9Power_v">0</tspan> W
+  </text>
+  <g id="cCircle9Link" class="ringHide"></g>
+
+  <script>
+    (() => {
+      const script = document.currentScript;
+      const svg = script.closest('svg');
+      const container = svg.parentNode.parentNode;
+
+      if (!container || !container.hasAttribute("informId")) {
+        return;
+      }
+
+      const name = container.getAttribute("informId");
+
+      function adjustViewBox() { 
+            const svg = document.getElementById("mySVG");
+            if (!svg) return;
+
+            const values = getValues();
+            const visibleRings = {
+                1: values[`visibleRing1`],
+                2: values[`visibleRing2`],
+                3: values[`visibleRing3`],
+                4: values[`visibleRing4`],
+                5: values[`visibleRing5`],
+                6: values[`visibleRing6`],
+                7: values[`visibleRing7`],
+                8: values[`visibleRing8`],
+                9: values[`visibleRing9`]
+            };
+
+            if (window.innerWidth < 1200) {
+                svg.setAttribute('viewBox', '15 0 450 480');
+            } else {
+                if (visibleRings[9] || visibleRings[8] || visibleRings[7]) {
+                    svg.setAttribute('viewBox', '20 -30 900 550');
+                } else if (visibleRings[6] || visibleRings[5]) {
+                    svg.setAttribute('viewBox', '10 -10 780 500');
+                } else if (visibleRings[4] || visibleRings[3]) {
+                    svg.setAttribute('viewBox', '10 -10 630 500');
+                } else if (visibleRings[2] || visibleRings[1]) {
+                    svg.setAttribute('viewBox', '10 -10 500 500');
+                } 
+            }
+      }
+
+      window.addEventListener('resize', adjustViewBox);
+      window.addEventListener('load', adjustViewBox);
+
+      adjustViewBox();
+
+      function getValues() {
+        const svg = document.getElementById("mySVG");
+        const keys = ["grid_v", "battery_v", "solar_v", "batteryState_v"];
+        const values = Object.fromEntries(
+            keys.map(k => {
+                const element = svg.querySelector(`.informId_ringSVG\\:${k}`);
+                const value = element ? parseInt(element.textContent) : NaN;
+                console.log(`${k}_value: ${value}`);
+                return [`${k}_value`, isNaN(value) ? element.textContent : value];
+            })
+        );
+
+        for (let i = 1; i <= 9; i++) {
+            const powerElement = svg.querySelector(`.informId_ringSVG\\:cCircle${i}Power_v`);
+            const power = powerElement ? powerElement.textContent : "";
+            const nameElement = svg.querySelector(`.informId_ringSVG\\:cCircle${i}Name_s`);
+            const name = nameElement ? nameElement.textContent : "";
+
+            console.log(`cCircle${i}Power_v_value: ${power}, cCircle${i}Name_s: ${name}`);
+
+            values[`cCircle${i}Power_v_value`] = power;
+            values[`cCircle${i}Name_s`] = name;
+
+            values[`visibleRing${i}`] = (name !== "n/a");
+        }
+
+        console.log("Final values: ", values);
+        return values;
+      }
+
+      const { grid_v_value, battery_v_value, solar_v_value, batteryState_v_value} = getValues();
+
+      let lastState = null;
+
+      function setBatteryAnimation(batteryState_v_value) {
+          if (batteryState_v_value === lastState) return;
+          lastState = batteryState_v_value;
+          const batteryCircle = document.getElementById('batteryCircle');
+
+          batteryCircle.classList.remove('battery-stop', 'battery-gridLoad', 'battery-gridUnload', 'battery-solarLoad', 'battery-houseUnload');
+          batteryCircle.classList.add(`battery-${batteryState_v_value}`);
+      }
+
+      const CIRCUMFERENCE = 2 * Math.PI * 42;
+
+      function updateRing(solar, grid, battery) {
+          const values = [Math.max(0, solar), Math.max(0, grid), Math.max(0, battery)];
+          const total = values.reduce((a, b) => a + b, 0);
+          if (total === 0) return;
+
+          const segments = ['solarSegment', 'gridSegment', 'batterySegment']
+              .map(id => document.getElementById(id));
+
+          if (segments.includes(null)) return;
+
+          let offset = 0;
+          segments.forEach((segment, i) => {
+              const length = (values[i] / total) * CIRCUMFERENCE;
+              segment.setAttribute('stroke-dasharray', `${length} ${CIRCUMFERENCE}`);
+              segment.setAttribute('stroke-dashoffset', -offset);
+              offset += length;
+          });
+      }
+
+      function updateCircleVisibility() {
+          for (let i = 1; i <= 9; i++) {
+              const nameElement = document.querySelector(`#cCircle${i}Name`);
+              if (!nameElement) continue;
+
+              const rings = document.querySelectorAll(`
+                  #cCircle${i}ShowOrNot1, #cCircle${i}ShowOrNot2, #cCircle${i}Icon,
+                  #cCircle${i}Name, #cCircle${i}Power, #houseTocCircle${i}Path,
+                  #houseTocCircle${i}, #houseTocCircle${i}Path, #cCircle${i}Link
+              `);
+
+              const displayStyle = nameElement.textContent.trim() === 'n/a' ? 'none' : 'block';
+              rings.forEach(ring => ring.style.display = displayStyle);
+          }
+      }
+
+      updateCircleVisibility();
+
+      {
+
+          const { 
+                    grid_v_value, battery_v_value, solar_v_value, batteryState_v_value,
+                    cCircle1Power_v_value, cCircle2Power_v_value, cCircle3Power_v_value,
+                    cCircle4Power_v_value, cCircle5Power_v_value, cCircle6Power_v_value,
+                    cCircle7Power_v_value, cCircle8Power_v_value, cCircle9Power_v_value
+                } = getValues();
+          const adjustedBatteryValue = (["solarLoad", "gridLoad", "gridUnload", "stop"].includes(batteryState_v_value)) ? 0 : battery_v_value;
+
+          updateRing(solar_v_value, grid_v_value, adjustedBatteryValue);
+
+          if (grid_v_value > 0) {
+              gridToHouseCircle.classList.remove("motion-disabled");
+              gridToHouseCircle.classList.add("motion-enabled-gridToHouse");
+              gridToLowCarbonCircle.classList.remove("motion-disabled");
+              gridToLowCarbonCircle.classList.add("motion-enabled-gridToLowCarbon");
+          }
+
+          if (grid_v_value < 0) {
+              solarToGridCircle.classList.remove("motion-disabled");
+              solarToGridCircle.classList.add("motion-enabled-solarToGrid");
+              gridToHouseCircle.classList.add("motion-disabled");
+              gridToHouseCircle.classList.remove("motion-enabled-gridToHouse");
+              gridToLowCarbonCircle.classList.add("motion-disabled");
+              gridToLowCarbonCircle.classList.remove("motion-enabled-gridToLowCarbon");
+          }
+
+          if (solar_v_value > 0) {
+              solarToGridCircle.classList.add("motion-enabled-solarToGrid");
+              solarToHouseCircle.classList.remove("motion-disabled");
+              solarToHouseCircle.classList.add("motion-enabled-solarToHouse");
+          }
+
+          if (cCircle1Power_v_value > 0) {
+              houseTocCircle1.classList.remove("motion-disabled");
+              houseTocCircle1.classList.add("motion-enabled-circle1");
+          }
+
+          if (cCircle2Power_v_value > 0) {
+              houseTocCircle2.classList.remove("motion-disabled");
+              houseTocCircle2.classList.add("motion-enabled-circle2");
+          }
+
+          if (cCircle3Power_v_value > 0) {
+              houseTocCircle3.classList.remove("motion-disabled");
+              houseTocCircle3.classList.add("motion-enabled-circle3");
+          } 
+
+          if (cCircle4Power_v_value > 0) {
+              houseTocCircle4.classList.remove("motion-disabled");
+              houseTocCircle4.classList.add("motion-enabled-circle4");
+          } 
+
+          if (cCircle5Power_v_value > 0) {
+              houseTocCircle5.classList.remove("motion-disabled");
+              houseTocCircle5.classList.add("motion-enabled-circle5");
+          } 
+
+          if (cCircle6Power_v_value > 0) {
+              houseTocCircle6.classList.remove("motion-disabled");
+              houseTocCircle6.classList.add("motion-enabled-circle6");
+          } 
+
+          if (cCircle7Power_v_value > 0) {
+              houseTocCircle7.classList.remove("motion-disabled");
+              houseTocCircle7.classList.add("motion-enabled-circle7");
+          } 
+
+          if (cCircle8Power_v_value > 0) {
+              houseTocCircle8.classList.remove("motion-disabled");
+              houseTocCircle8.classList.add("motion-enabled-circle8");
+          }
+
+          if (cCircle9Power_v_value > 0) {
+              houseTocCircle9.classList.remove("motion-disabled");
+              houseTocCircle9.classList.add("motion-enabled-circle9");
+          }
+
+          if (batteryState_v_value === "houseUnload") {
+              batteryToHouseCircle.classList.remove("motion-disabled");
+              batteryToHouseCircle.classList.add("motion-enabled-batteryToHouse");
+              setBatteryAnimation('houseUnload');
+
+          } else if (batteryState_v_value === "solarLoad") {
+              solarToBatteryCircle.classList.remove("motion-disabled");
+              solarToBatteryCircle.classList.add("motion-enabled-solarToBattery");
+              setBatteryAnimation('solarLoad');
+
+          } else if (batteryState_v_value === "gridLoad") {
+              gridToBatteryCircle.classList.remove("motion-disabled");
+              gridToBatteryCircle.classList.add("motion-enabled-gridToBattery");
+              setBatteryAnimation('gridLoad');
+
+          } else if (batteryState_v_value === "gridUnload") {
+              batteryToGridCircle.classList.remove("motion-disabled");
+              batteryToGridCircle.classList.add("motion-enabled-batteryToGrid");
+              setBatteryAnimation('gridUnload');
+
+          } else if (batteryState_v_value === "stop") {
+              setBatteryAnimation('stop');
+          }
+
+      };
+
+      container.setValueFn = (value, ring) => {
+        const tspan = svg.querySelector(`.informId_ringSVG\\:${ring}`);
+        if (tspan) {
+          tspan.textContent = value;
+        }
+
+        const { 
+                  grid_v_value, battery_v_value, solar_v_value, batteryState_v_value,
+                  cCircle1Power_v_value, cCircle2Power_v_value, cCircle3Power_v_value,
+                  cCircle4Power_v_value, cCircle5Power_v_value, cCircle6Power_v_value,
+                  cCircle7Power_v_value, cCircle8Power_v_value, cCircle9Power_v_value
+              } = getValues();     
+        const adjustedBatteryValue = (["solarLoad", "gridLoad", "gridUnload", "stop"].includes(batteryState_v_value)) ? 0 : battery_v_value;
+
+        updateRing(solar_v_value, grid_v_value, adjustedBatteryValue);
+
+        if (ring === "grid_v") {
+          const grid_v_value = parseInt(value);
+
+          if (grid_v_value < 0) {
+            gridToHouseCircle.classList.add("motion-disabled");
+            gridToHouseCircle.classList.remove("motion-enabled-gridToHouse");
+            solarToGridCircle.classList.remove("motion-disabled");
+            solarToGridCircle.classList.add("motion-enabled-solarToGrid");
+            gridToLowCarbonCircle.classList.add("motion-disabled");
+            gridToLowCarbonCircle.classList.remove("motion-enabled-gridToLowCarbon");
+
+          } else {
+            gridToHouseCircle.classList.remove("motion-disabled");
+            gridToHouseCircle.classList.add("motion-enabled-gridToHouse");
+            solarToGridCircle.classList.remove("motion-enabled-solarToGrid");
+            solarToGridCircle.classList.add("motion-disabled");
+            gridToLowCarbonCircle.classList.remove("motion-disabled");
+            gridToLowCarbonCircle.classList.add("motion-enabled-gridToLowCarbon");
+          }
+        }
+ 
+        else if (ring === "solar_v") {
+          const solar_v_value = parseInt(value);
+
+          if (solar_v_value > 0) {
+            solarToHouseCircle.classList.remove("motion-disabled");
+            solarToHouseCircle.classList.add("motion-enabled-solarToHouse");
+          } else {
+            solarToHouseCircle.classList.remove("motion-enabled-solarToHouse");
+            solarToHouseCircle.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle1Power_v") {
+          const cCircle1Power_v_value = parseInt(value);
+
+          if (cCircle1Power_v_value > 0) {
+            houseTocCircle1.classList.remove("motion-disabled");
+            houseTocCircle1.classList.add("motion-enabled-circle1");
+          } else {
+            houseTocCircle1.classList.remove("motion-enabled-circle1");
+            houseTocCircle1.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle2Power_v") {
+          const cCircle2Power_v_value = parseInt(value);
+
+          if (cCircle2Power_v_value > 0) {
+            houseTocCircle2.classList.remove("motion-disabled");
+            houseTocCircle2.classList.add("motion-enabled-circle2");
+          } else {
+            houseTocCircle2.classList.remove("motion-enabled-circle2");
+            houseTocCircle2.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle3Power_v") {
+          const cCircle3Power_v_value = parseInt(value);
+
+          if (cCircle3Power_v_value > 0) {
+            houseTocCircle3.classList.remove("motion-disabled");
+            houseTocCircle3.classList.add("motion-enabled-circle3");
+          } else {
+            houseTocCircle3.classList.remove("motion-enabled-circle3");
+            houseTocCircle3.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle4Power_v") {
+          const cCircle4Power_v_value = parseInt(value);
+
+          if (cCircle4Power_v_value > 0) {
+            houseTocCircle4.classList.remove("motion-disabled");
+            houseTocCircle4.classList.add("motion-enabled-circle4");
+          } else {
+            houseTocCircle4.classList.remove("motion-enabled-circle4");
+            houseTocCircle4.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle5Power_v") {
+          const cCircle5Power_v_value = parseInt(value);
+
+          if (cCircle5Power_v_value > 0) {
+            houseTocCircle5.classList.remove("motion-disabled");
+            houseTocCircle5.classList.add("motion-enabled-circle5");
+          } else {
+            houseTocCircle5.classList.remove("motion-enabled-circle5");
+            houseTocCircle5.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle6Power_v") {
+          const cCircle6Power_v_value = parseInt(value);
+
+          if (cCircle6Power_v_value > 0) {
+            houseTocCircle6.classList.remove("motion-disabled");
+            houseTocCircle6.classList.add("motion-enabled-circle6");
+          } else {
+            houseTocCircle6.classList.remove("motion-enabled-circle6");
+            houseTocCircle6.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle7Power_v") {
+          const cCircle7Power_v_value = parseInt(value);
+
+          if (cCircle7Power_v_value > 0) {
+            houseTocCircle7.classList.remove("motion-disabled");
+            houseTocCircle7.classList.add("motion-enabled-circle7");
+          } else {
+            houseTocCircle7.classList.remove("motion-enabled-circle7");
+            houseTocCircle7.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle8Power_v") {
+          const cCircle8Power_v_value = parseInt(value);
+
+          if (cCircle8Power_v_value > 0) {
+            houseTocCircle8.classList.remove("motion-disabled");
+            houseTocCircle8.classList.add("motion-enabled-circle8");
+          } else {
+            houseTocCircle8.classList.remove("motion-enabled-circle8");
+            houseTocCircle8.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "cCircle9Power_v") {
+          const cCircle9Power_v_value = parseInt(value);
+
+          if (cCircle9Power_v_value > 0) {
+            houseTocCircle9.classList.remove("motion-disabled");
+            houseTocCircle9.classList.add("motion-enabled-circle9");
+          } else {
+            houseTocCircle9.classList.remove("motion-enabled-circle9");
+            houseTocCircle9.classList.add("motion-disabled");
+          }
+        }
+
+        else if (ring === "batteryState_v") {
+          const batteryState_v_value = value;
+
+          if (batteryState_v_value === "houseUnload") {
+            batteryToHouseCircle.classList.add("motion-enabled-batteryToHouse");
+            batteryToHouseCircle.classList.remove("motion-disabled");
+            solarToBatteryCircle.classList.remove("motion-enabled-solarToBattery");
+            solarToBatteryCircle.classList.add("motion-disabled");
+            gridToBatteryCircle.classList.remove("motion-enabled-gridToBattery");
+            gridToBatteryCircle.classList.add("motion-disabled");
+            batteryToGridCircle.classList.remove("motion-enabled-batteryToGrid");
+            batteryToGridCircle.classList.add("motion-disabled");
+            setBatteryAnimation('houseUnload');
+
+          } else if (batteryState_v_value === "solarLoad") {
+            batteryToHouseCircle.classList.remove("motion-enabled-batteryToHouse");
+            batteryToHouseCircle.classList.add("motion-disabled");
+            solarToBatteryCircle.classList.add("motion-enabled-solarToBattery");
+            solarToBatteryCircle.classList.remove("motion-disabled");
+            gridToBatteryCircle.classList.remove("motion-enabled-gridToBattery");
+            gridToBatteryCircle.classList.add("motion-disabled");
+            batteryToGridCircle.classList.remove("motion-enabled-batteryToGrid");
+            batteryToGridCircle.classList.add("motion-disabled");
+            setBatteryAnimation('solarLoad');
+
+          } else if (batteryState_v_value === "gridLoad") {
+            batteryToHouseCircle.classList.remove("motion-enabled-batteryToHouse");
+            batteryToHouseCircle.classList.add("motion-disabled");
+            solarToBatteryCircle.classList.remove("motion-enabled-solarToBattery");
+            solarToBatteryCircle.classList.add("motion-disabled");
+            gridToBatteryCircle.classList.add("motion-enabled-gridToBattery");
+            gridToBatteryCircle.classList.remove("motion-disabled");
+            batteryToGridCircle.classList.remove("motion-enabled-batteryToGrid");
+            batteryToGridCircle.classList.add("motion-disabled");
+            setBatteryAnimation('gridLoad');
+
+          }  else if (batteryState_v_value === "gridUnload") {
+            batteryToHouseCircle.classList.remove("motion-enabled-batteryToHouse");
+            batteryToHouseCircle.classList.add("motion-disabled");
+            solarToBatteryCircle.classList.remove("motion-enabled-solarToBattery");
+            solarToBatteryCircle.classList.add("motion-disabled");
+            gridToBatteryCircle.classList.remove("motion-enabled-gridToBattery");
+            gridToBatteryCircle.classList.add("motion-disabled");
+            batteryToGridCircle.classList.add("motion-enabled-batteryToGrid");
+            batteryToGridCircle.classList.remove("motion-disabled");
+            setBatteryAnimation('gridUnload');
+
+          } else if (batteryState_v_value === "stop") {
+            batteryToHouseCircle.classList.remove("motion-enabled-batteryToHouse");
+            batteryToHouseCircle.classList.add("motion-disabled");
+            solarToBatteryCircle.classList.remove("motion-enabled-solarToBattery");
+            solarToBatteryCircle.classList.add("motion-disabled");
+            gridToBatteryCircle.classList.remove("motion-enabled-gridToBattery");
+            gridToBatteryCircle.classList.add("motion-disabled");
+            batteryToGridCircle.classList.remove("motion-enabled-batteryToGrid");
+            batteryToGridCircle.classList.add("motion-disabled");
+            setBatteryAnimation('stop');
+
+          }
+
+        }
+      
+      };
+
+      function addInformIdHandler(informId, setFn) {
+        const div = document.createElement('div');
+        div.style.display = 'none';
+        div.setAttribute('informId', informId);
+        div.setValueFn = setFn;
+        container.appendChild(div);
+      }
+
+      addInformIdHandler(name + "-lowcarbon_v", (value) => {
+        container.setValueFn(value, 'lowcarbon_v');
+      });
+      addInformIdHandler(name + "-grid_v", (value) => {
+        container.setValueFn(value, 'grid_v');
+      });
+      addInformIdHandler(name + "-grid_in_v", (value) => {
+        container.setValueFn(value, 'grid_in_v');
+      });
+      addInformIdHandler(name + "-grid_out_v", (value) => {
+        container.setValueFn(value, 'grid_out_v');
+      });
+      addInformIdHandler(name + "-house_v", (value) => {
+        container.setValueFn(value, 'house_v');
+      });
+      addInformIdHandler(name + "-solar_v", (value) => {
+          console.log("SVG_Intern_solar_v received:", value);
+          container.setValueFn(value, 'solar_v');
+      });      
+      addInformIdHandler(name + "-battery_p", (value) => {
+        container.setValueFn(value, 'battery_p');
+      });
+      addInformIdHandler(name + "-battery_v", (value) => {
+        container.setValueFn(value, 'battery_v');
+      });
+      addInformIdHandler(name + "-batteryState_v", (value) => {
+        container.setValueFn(value, 'batteryState_v');
+      });
+      addInformIdHandler(name + "-solar_i", (value) => {
+        container.setValueFn(value, 'solar_i');
+      });
+      addInformIdHandler(name + "-solar_i", (value) => {
+        container.setValueFn(value, 'solar_i');
+      });
+      addInformIdHandler(name + "-cCircle1Name_s", (value) => {
+        container.setValueFn(value, 'cCircle1Name_s');
+      });
+      addInformIdHandler(name + "-cCircle1Power_v", (value) => {
+        container.setValueFn(value, 'cCircle1Power_v');
+      });
+      addInformIdHandler(name + "-cCircle2Name_s", (value) => {
+        container.setValueFn(value, 'cCircle2Name_s');
+      });
+      addInformIdHandler(name + "-cCircle2Power_v", (value) => {
+        container.setValueFn(value, 'cCircle2Power_v');
+      });
+      addInformIdHandler(name + "-cCircle3Name_s", (value) => {
+        container.setValueFn(value, 'cCircle3Name_s');
+      });
+      addInformIdHandler(name + "-cCircle3Power_v", (value) => {
+        container.setValueFn(value, 'cCircle3Power_v');
+      });
+      addInformIdHandler(name + "-cCircle4Name_s", (value) => {
+        container.setValueFn(value, 'cCircle4Name_s');
+      });
+      addInformIdHandler(name + "-cCircle4Power_v", (value) => {
+        container.setValueFn(value, 'cCircle4Power_v');
+      });
+      addInformIdHandler(name + "-cCircle5Name_s", (value) => {
+        container.setValueFn(value, 'cCircle5Name_s');
+      });
+      addInformIdHandler(name + "-cCircle5Power_v", (value) => {
+        container.setValueFn(value, 'cCircle5Power_v');
+      });
+      addInformIdHandler(name + "-cCircle6Name_s", (value) => {
+        container.setValueFn(value, 'cCircle6Name_s');
+      });
+      addInformIdHandler(name + "-cCircle6Power_v", (value) => {
+        container.setValueFn(value, 'cCircle6Power_v');
+      });
+      addInformIdHandler(name + "-cCircle7Name_s", (value) => {
+        container.setValueFn(value, 'cCircle7Name_s');
+      });
+      addInformIdHandler(name + "-cCircle7Power_v", (value) => {
+        container.setValueFn(value, 'cCircle7Power_v');
+      });
+      addInformIdHandler(name + "-cCircle8Name_s", (value) => {
+        container.setValueFn(value, 'cCircle8Name_s');
+      });
+      addInformIdHandler(name + "-cCircle8Power_v", (value) => {
+        container.setValueFn(value, 'cCircle8Power_v');
+      });
+      addInformIdHandler(name + "-cCircle9Name_s", (value) => {
+        container.setValueFn(value, 'cCircle9Name_s');
+      });
+      addInformIdHandler(name + "-cCircle9Power_v", (value) => {
+        container.setValueFn(value, 'cCircle9Power_v');
+      });
+
+    })();
+  </script>
+</svg>
