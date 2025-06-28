@@ -30,7 +30,7 @@ Um das SVG an euren Geschmack anzupassen, empfehle ich diese SVG-Editors:
 - https://www.svgviewer.dev/
 - https://boxy-svg.com/app
 
-1. powergrid.svg
+## 1. powergrid.svg
 
 - Das Svg aus dem Anhang nach /opt/fhem/www/images/fhemSVG kopieren.
 - Rechte: Eigentümer fhem / Gruppe dialout
@@ -40,7 +40,7 @@ set WEBphone rereadicons
 set WEBtablet rereadicons
 ```
 
-2. dummy
+## 2. dummy
 Anlegen oben links mit dem Pluszeichen.
 ```
 defmod powergrid dummy
@@ -156,7 +156,7 @@ attr powergrid setList battery_v battery_p batteryState_v:select,stop,gridLoad,g
 
 ```
 
-4. Werte setzen mit notify oder DOIF
+## 3. Werte setzen mit notify oder DOIF
 3.1 notify
 ```
 defmod notify_Powergrid notify (Smartmeter_2E1F50:APOX_Power:.*|Smartmeter_2E1F50:statAPOX_E_inDay:.*|Smartmeter_2E1F50:statAPOX_E_outDay:.*|OpenDTU:total.Power.v:.*|electricitymap:fossilFreePercentage:.*|Luftentfeuchter:ENERGY_Power:.*|MQTT2_zigbee_Waschmaschine:power:.*|MQTT2_zigbee_Trockner:power:.*|MQTT2_zigbee_Geschirrspueler:power:.*|MQTT2_zigbee_Kuehlschrank:power:.*|Heizstab_BW_Pwr:power:.*|Server:ENERGY_Power:.*) \
@@ -252,7 +252,7 @@ DOELSEIF  ([Heizstab_BW_Pwr:"^power:.*$"])\
 
 ```
 
-4. Electricmap - Erzeugt das Reading für FossilFree
+## 4. Electricmap - Erzeugt das Reading für FossilFree
 
 Laut Webseite wird ein Apikey benötigt. Es funktioniert aber auch ohne.
 Update:
